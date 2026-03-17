@@ -1,0 +1,119 @@
+<DOCTYPE html>
+    <html>
+        <head>
+            <title> CALENDAR PLANNER </title>
+            <link rel="stylesheet" href="body.css">
+            <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
+        </head>
+
+        <body>
+            <header class="w3-container w3-center"> 
+               <h1> CREATE A DATE PLAN! </h1>
+            </header>
+
+            <div class ="blun w3-center w3-container"> 
+                <h2> MARCH 2026 </h2>
+            </div>
+
+            <div class = "sets w3-container">
+                <div class = "w3-right w3-container">
+                <div class = "management w3-center">something to be added, like reminders</div>
+            </div>       
+            
+
+            
+            <div class="CALENDAR"> 
+
+                <div class = "day">Sun</div>
+                <div class = "day">Mon</div>
+                <div class = "day">Tues</div>
+                <div class = "day">Wed</div>
+                <div class = "day">Thu</div>
+                <div class = "day">Fri</div>
+                <div class = "day">Sat</div>
+
+                <div class = "date" data-date = "1">1</div>
+                <div class = "date" data-date = "2">2</div>
+                <div class = "date" data-date = "3">3</div>
+                <div class = "date" data-date = "4">4</div>
+                <div class = "date" data-date = "5">5</div>
+                <div class = "date" data-date = "6">6</div>
+                <div class = "date" data-date = "7">7</div>
+                <div class = "date" data-date = "8">8</div>
+                <div class = "date" data-date = "9">9</div>
+                <div class = "date" data-date = "10">10</div>
+                <div class = "date" data-date = "11">11</div>
+                <div class = "date" data-date = "12">12</div>
+                <div class = "date" data-date = "13">13</div>
+                <div class = "date" data-date = "14">14</div>
+                <div class = "date" data-date = "15">15</div>
+                <div class = "date" data-date = "16">16</div>
+                <div class = "date" data-date = "17">17</div>
+                <div class = "date" data-date = "18">18</div>
+                <div class = "date" data-date = "19">19</div>
+                <div class = "date" data-date = "20">20</div>
+                <div class = "date" data-date = "21">21</div>
+                <div class = "date" data-date = "22">22</div>
+                <div class = "date" data-date = "23">23</div>
+                <div class = "date" data-date = "24">24</div>
+                <div class = "date" data-date = "25">25</div>
+                <div class = "date" data-date = "26">26</div>
+                <div class = "date" data-date = "27">27</div>
+                <div class = "date" data-date = "28">28</div>
+                <div class = "date" data-date = "29">29</div>
+                <div class = "date" data-date = "30">30</div>
+                <div class = "date" data-date = "30">30</div>
+            </div>
+
+            <div id="taskBoard">
+                  <h3>Tasks</h3>
+                   <ul id="taskList"></ul>
+            </div>
+                
+            <script>
+
+            let tasks = {}
+
+            document.querySelectorAll(".day").forEach(day => {
+
+                day.addEventListener("click", function() {
+
+                    let date = this.getAttribute("data-date")
+
+                    let task = prompt("Create an event/task for March " + date)
+
+                        if(task){
+
+                            if(!tasks[date]){
+                            tasks[date] = []
+                            }
+
+                             tasks[date].push(task)
+
+                             showTasks(date)
+                        }
+
+                })
+
+            })
+
+            function showTasks(date){
+
+                let list = document.getElementById("taskList")
+                list.innerHTML = ""
+
+                    tasks[date].forEach(task => {
+
+                     let li = document.createElement("li")
+                     li.textContent = "March " + date + ": " + task
+
+                     list.appendChild(li)
+
+                    })
+
+            }
+
+            </script>
+
+        </body>
+    </html>
