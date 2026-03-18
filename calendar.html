@@ -69,51 +69,7 @@
                   <h3>Tasks</h3>
                    <ul id="taskList"></ul>
             </div>
+
                 
-            <script>
-
-            let tasks = {}
-
-            document.querySelectorAll(".day").forEach(day => {
-
-                day.addEventListener("click", function() {
-
-                    let date = this.getAttribute("data-date")
-
-                    let task = prompt("Create an event/task for March " + date)
-
-                        if(task){
-
-                            if(!tasks[date]){
-                            tasks[date] = []
-                            }
-
-                             tasks[date].push(task)
-
-                             showTasks(date)
-                        }
-
-                })
-
-            })
-
-            function showTasks(date){
-
-                let list = document.getElementById("taskList")
-                list.innerHTML = ""
-
-                    tasks[date].forEach(task => {
-
-                     let li = document.createElement("li")
-                     li.textContent = "March " + date + ": " + task
-
-                     list.appendChild(li)
-
-                    })
-
-            }
-
-            </script>
-
         </body>
     </html>
