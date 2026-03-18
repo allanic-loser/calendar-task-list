@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CALENDAR PLANNER</title>
+  <link rel="stylesheet" href="body.css">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
+</head>
+<body>
+
+<header>
+  <h1>CREATE A DATE PLAN!</h1>
+</header>
+
+<div class="blun">MARCH 2026</div>
+
+<div class="sets w3-container">
+
+  <!-- Calendar -->
+  <div class="CALENDAR">
+    <div class="day">Sun</div>
+    <div class="day">Mon</div>
+    <div class="day">Tues</div>
+    <div class="day">Wed</div>
+    <div class="day">Thu</div>
+    <div class="day">Fri</div>
+    <div class="day">Sat</div>
+
+    <div class="date" data-date="1">1</div>
+    <div class="date" data-date="2">2</div>
+    <div class="date" data-date="3">3</div>
+    <div class="date" data-date="4">4</div>
+    <div class="date" data-date="5">5</div>
+    <div class="date" data-date="6">6</div>
+    <div class="date" data-date="7">7</div>
+    <div class="date" data-date="8">8</div>
+    <div class="date" data-date="9">9</div>
+    <div class="date" data-date="10">10</div>
+    <div class="date" data-date="11">11</div>
+    <div class="date" data-date="12">12</div>
+    <div class="date" data-date="13">13</div>
+    <div class="date" data-date="14">14</div>
+    <div class="date" data-date="15">15</div>
+    <div class="date" data-date="16">16</div>
+    <div class="date" data-date="17">17</div>
+    <div class="date" data-date="18">18</div>
+    <div class="date" data-date="19">19</div>
+    <div class="date" data-date="20">20</div>
+    <div class="date" data-date="21">21</div>
+    <div class="date" data-date="22">22</div>
+    <div class="date" data-date="23">23</div>
+    <div class="date" data-date="24">24</div>
+    <div class="date" data-date="25">25</div>
+    <div class="date" data-date="26">26</div>
+    <div class="date" data-date="27">27</div>
+    <div class="date" data-date="28">28</div>
+    <div class="date" data-date="29">29</div>
+    <div class="date" data-date="30">30</div>
+    <div class="date" data-date="31">31</div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="management">
+    <div id="taskBoard">
+      <h3>All Events</h3>
+      <ul id="taskList">
+        <li id="no-tasks" style="background:none; color:#aaa; font-size:13px; text-align:center; padding:1rem 0;">
+          No events yet. Click a date!
+        </li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h2 id="modalTitle">Add Event</h2>
+    <label for="eventName">Event name *</label>
+    <input type="text" id="eventName" placeholder="e.g. Doctor's appointment" />
+
+    <label for="eventDesc">Notes</label>
+    <textarea id="eventDesc" placeholder="Optional details..."></textarea>
+
+    <div class="modal-row">
+      <div>
+        <label for="eventTime">Time</label>
+        <input type="time" id="eventTime" />
+      </div>
+      <div>
+        <label for="eventColor">Color</label>
+        <select id="eventColor">
+          <option value="#1a73e8">Blue</option>
+          <option value="#e53935">Red</option>
+          <option value="#43a047">Green</option>
+          <option value="#fb8c00">Orange</option>
+          <option value="#8e24aa">Purple</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-add" onclick="saveEvent()">Add Event</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let tasks = {};
+  let selectedDate = null;
+
+  // Highlight today
+  const todayDate = new Date();
+  if (todayDate.getMonth() === 2 && todayDate.getFullYear() === 2026) {
+    const todayEl = document.querySelector(`.date[data-date="${todayDate.getDate()}"]`);
+    if (todayEl) todayEl.classList.add('today');
+  }
+
+  // Click on a date
+  document.querySelectorAll(".date").forEach(dateEl => {
+    dateEl.addEventListener("click", function () {
+      selectedDate = this.getAttribute("data-date");
+      document.getElementById("modalTitle").textContent = "Add Event — March " + selectedDate;
+      document.getElementById("eventName").value = "";
+      document.getElementById("eventDesc").value = "";
+      document.getElementById("eventTime").value = "";
+      document.getElementById("modalOverlay").classList.add("open");
+      setTimeout(() => document.getElementById("eventName").focus(), 100);
+    });
+  });
+
+  // Close modal
+  function closeModal() {
+    document.getElementById("modalOverlay").classList.remove("open");
+    selectedDate = null;
+  }
+
+  // Close on overlay click
+  document.getElementById("modalOverlay").addEventListener("click", function (e) {
+    if (e.target === this) closeModal();
+  });
+
+  // Save event
+  function saveEvent() {
+    const name  = document.getElementById("eventName").value.trim();
+    const desc  = document.getElementById("eventDesc").value.trim();
+    const time  = document.getElementById("eventTime").value;
+    const color = document.getElementById("eventColor").value;
+
+    if (!name) {
+      document.getElementById("eventName").focus();
+      document.getElementById("eventName").style.borderColor = "#e53935";
+      return;
+    }
+    document.getElementById("eventName").style.borderColor = "";
+
+    if (!tasks[selectedDate]) tasks[selectedDate] = [];
+    tasks[selectedDate].push({ name, desc, time, color });
+
+    renderCalendarDots();
+    renderTaskList();
+    closeModal();
+  }
+
+  // Show event labels on calendar cells
+  function renderCalendarDots() {
+    document.querySelectorAll(".date").forEach(el => {
+      const d = el.getAttribute("data-date");
+      el.querySelectorAll(".event-dot").forEach(dot => dot.remove());
+
+      if (tasks[d]) {
+        tasks[d].slice(0, 2).forEach(ev => {
+          const dot = document.createElement("span");
+          dot.className = "event-dot";
+          dot.textContent = (ev.time ? ev.time + " " : "") + ev.name;
+          dot.style.background = ev.color + "22";
+          dot.style.color = ev.color;
+          el.appendChild(dot);
+        });
+        if (tasks[d].length > 2) {
+          const more = document.createElement("span");
+          more.className = "event-dot";
+          more.textContent = `+${tasks[d].length - 2} more`;
+          more.style.color = "#888";
+          more.style.background = "#f0f4f8";
+          el.appendChild(more);
+        }
+      }
+    });
+  }
+
+  // Render sidebar task list
+  function renderTaskList() {
+    const list = document.getElementById("taskList");
+    list.innerHTML = "";
+
+    const allDates = Object.keys(tasks).sort((a, b) => parseInt(a) - parseInt(b));
+
+    if (allDates.length === 0) {
+      list.innerHTML = '<li id="no-tasks" style="background:none; color:#aaa; font-size:13px; text-align:center; padding:1rem 0;">No events yet. Click a date!</li>';
+      return;
+    }
+
+    allDates.forEach(date => {
+      tasks[date].forEach((ev, idx) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <div class="task-info">
+            <div class="task-date">March ${date}${ev.time ? " · " + formatTime(ev.time) : ""}</div>
+            <div class="task-name" style="color:${ev.color}">${ev.name}</div>
+            ${ev.desc ? `<div class="task-time" style="color:#888">${ev.desc}</div>` : ""}
+          </div>
+          <button class="del-btn" onclick="deleteTask('${date}', ${idx})" title="Delete">✕</button>
+        `;
+        list.appendChild(li);
+      });
+    });
+  }
+
+  // Delete a task
+  function deleteTask(date, idx) {
+    tasks[date].splice(idx, 1);
+    if (tasks[date].length === 0) delete tasks[date];
+    renderCalendarDots();
+    renderTaskList();
+  }
+
+  // Format time to 12hr
+  function formatTime(t) {
+    if (!t) return "";
+    const [h, m] = t.split(":").map(Number);
+    const ampm = h >= 12 ? "PM" : "AM";
+    const hr = h % 12 || 12;
+    return `${hr}:${String(m).padStart(2, "0")} ${ampm}`;
+  }
+</script>
+
+</body>
+</html>
